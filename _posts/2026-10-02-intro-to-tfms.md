@@ -20,7 +20,7 @@ These papers made it increasingly clear that tabular problems could not simply b
 
 # Prior-Data Fitted Networks
 
-Müller et al. (2022) introduces the Prior-data fitted network (PFN), which is the basis for modern tabular foundation models. Given a dataset $D=\{(x_i, y_i)\}_{i=1}^n$ and a query $x$, we are interested in finding the $\textit{posterior predictive distribution}$:
+Müller et al. (2022) introduces the Prior-data fitted network (PFN), which is the basis for modern tabular foundation models. Given a dataset $$D=\{(x_i, y_i)\}_{i=1}^n$$ and a query $$x$$, we are interested in finding the $$\textit{posterior predictive distribution}$$:
 
 $$
 \begin{equation*}
@@ -28,14 +28,14 @@ p(y | x, D) = \int_t p(y | x, t) p(t | D).
 \end{equation*}
 $$
 
-- $t$ is a latent variable representing the task, or a true rule that generated the data
-- $p(t)$ is the prior that gives you a probability distribution of what tasks are likely to be the true task
-- $p(t | D)$ is the posterior, representing which tasks are still plausible given the data we have observed
-- $p(y | x, t)$ is the distribution of outputs $y$ given the input and the true task
+- $$t$$ is a latent variable representing the task, or a true rule that generated the data
+- $$p(t)$$ is the prior that gives you a probability distribution of what tasks are likely to be the true task
+- $$p(t | D)$$ is the posterior, representing which tasks are still plausible given the data we have observed
+- $$p(y | x, t)$$ is the distribution of outputs $$y$$ given the input and the true task
 
-This gives us the distribution over output label $y$ given an input $x$ and all the data points seen before. By Bayes' rule, $p(t|D) \propto p(D|t)p(t)$.
+This gives us the distribution over output label $$y$$ given an input $$x$$ and all the data points seen before. By Bayes' rule, $$p(t|D) \propto p(D|t)p(t)$$.
 
-Suppose we have a parameterized model $q_\theta$ that accepts a dataset $D$ and query $x$ and predicts distributions of output $y$. We can define the $\textit{Prior-Data Negative Log-Likelihood}$:
+Suppose we have a parameterized model $$q_\theta$$ that accepts a dataset $$D$$ and query $$x$$ and predicts distributions of output $$y$$. We can define the $$\textit{Prior-Data Negative Log-Likelihood}$$:
 
 $$
 \begin{equation*}
@@ -43,7 +43,7 @@ $$
 \end{equation*}
 $$
 
-$\ell_\theta$ is the expectation of the cross-entropy (and thus minimizing it is also equivalent to minimizing the KL-Divergence) between the true PPD and its approximation $q_\theta$.
+$$\ell_\theta$$ is the expectation of the cross-entropy (and thus minimizing it is also equivalent to minimizing the KL-Divergence) between the true PPD and its approximation $$q_\theta$$.
 
 Proof:
 
@@ -55,20 +55,20 @@ $$
 &= \mathbb{E}_{x, D \sim p(D)} [H(p(\cdot | x, D), q_\theta (\cdot | x, D))],
 \end{align*}
 $$
-where $H$ represent cross-entropy.
+where $$H$$ represent cross-entropy.
 
 This allows them to use a transformer model to directly approximate the PPD, in contrast to previous methods that approximated the posterior. The method shows clear results in the task of performing Bayesian inference in the case of Gaussian Processes (GPs).
 
 They apply this to tabular datasets by building a classification prior on Bayesian Neural Networks (BNNs). By placing a prior over model architectures, they avoid the resource-intensive hyperparameter tuning and architecture search necessary to find a performant model. This allows for a fully Bayesian approach over both the weights and the architecture of the model. Their algorithm takes the following steps to train:
 
-1. Sample a model architecture $A \sim p(A)$
-2. Sample model weights for the given architecture: $W_{i,j} \sim p_w(\cdot)$
-3. Sample i.i.d. features $x_{i,f} \sim \mathcal{N}(0,1)$ for each data point $i$ and each feature $f$.
-4. Propagate each $x_i$ forward through $A_W$ yielding $\{(x_i, A_W(x_i))\}_{i=1}^N$.
+1. Sample a model architecture $$A \sim p(A)$$
+2. Sample model weights for the given architecture: $$W_{i,j} \sim p_w(\cdot)$$
+3. Sample i.i.d. features $$x_{i,f} \sim \mathcal{N}(0,1)$$ for each data point $$i$$ and each feature $$f$$.
+4. Propagate each $$x_i$$ forward through $$A_W$$ yielding $$\{(x_i, A_W(x_i))\}_{i=1}^N$$.
 
 Outputs are converted to class labels by thresholding.
 
-In this case, the task $t = (A,W)$. This is the rule that generates the data. Since the PPD integrates over the task, it means that we are able to integrate over both the candidate architectures and weights. By approximating this intractable function with a PFN, it gives us a method for efficiently evaluating the approximate prediction that we would get from averaging across all plausible architectures. One important weakness to notice about this model is that it maintains the biases of the prior. In this case, all the features are drawn from a standard Normal distribution, and labels are smooth functions of the features. In reality, this is a strong assumption to make and it is also why future architectures take different approaches.
+In this case, the task $$t = (A,W)$$. This is the rule that generates the data. Since the PPD integrates over the task, it means that we are able to integrate over both the candidate architectures and weights. By approximating this intractable function with a PFN, it gives us a method for efficiently evaluating the approximate prediction that we would get from averaging across all plausible architectures. One important weakness to notice about this model is that it maintains the biases of the prior. In this case, all the features are drawn from a standard Normal distribution, and labels are smooth functions of the features. In reality, this is a strong assumption to make and it is also why future architectures take different approaches.
 
 This paper was a strong proof-of-concept for a neural network approach to tabular data that could begin to compete with tree-based models, although its experiments were limited to small tabular datasets, and likely would not scale.
 
