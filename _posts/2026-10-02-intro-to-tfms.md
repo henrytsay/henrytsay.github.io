@@ -33,7 +33,7 @@ $$
 - $$p(t \mid D)$$ is the posterior, representing which tasks are still plausible given the data we have observed
 - $$p(y \mid x, t)$$ is the distribution of outputs $$y$$ given the input and the true task
 
-This gives us the distribution over output label $$y$$ given an input $$x$$ and all the data points seen before. By Bayes' rule, $$p(t\midD) \propto p(D\midt)p(t)$$.
+This gives us the distribution over output label $$y$$ given an input $$x$$ and all the data points seen before. By Bayes' rule, $$p(t \mid D) \propto p(D \mid t)p(t)$$.
 
 Suppose we have a parameterized model $$q_\theta$$ that accepts a dataset $$D$$ and query $$x$$ and predicts distributions of output $$y$$. We can define the $$\textit{Prior-Data Negative Log-Likelihood}$$:
 
@@ -55,6 +55,7 @@ $$
 &= \mathbb{E}_{x, D \sim p(D)} [H(p(\cdot \mid x, D), q_\theta (\cdot \mid x, D))],
 \end{align*}
 $$
+
 where $$H$$ represent cross-entropy.
 
 This allows them to use a transformer model to directly approximate the PPD, in contrast to previous methods that approximated the posterior. The method shows clear results in the task of performing Bayesian inference in the case of Gaussian Processes (GPs).
