@@ -24,22 +24,22 @@ Müller et al. (2022) introduces the Prior-data fitted network (PFN), which is t
 
 $$
 \begin{equation*}
-p(y | x, D) = \int_t p(y | x, t) p(t | D).
+p(y \mid x, D) = \int_t p(y \mid x, t) p(t \mid D).
 \end{equation*}
 $$
 
 - $$t$$ is a latent variable representing the task, or a true rule that generated the data
 - $$p(t)$$ is the prior that gives you a probability distribution of what tasks are likely to be the true task
-- $$p(t | D)$$ is the posterior, representing which tasks are still plausible given the data we have observed
-- $$p(y | x, t)$$ is the distribution of outputs $$y$$ given the input and the true task
+- $$p(t \mid D)$$ is the posterior, representing which tasks are still plausible given the data we have observed
+- $$p(y \mid x, t)$$ is the distribution of outputs $$y$$ given the input and the true task
 
-This gives us the distribution over output label $$y$$ given an input $$x$$ and all the data points seen before. By Bayes' rule, $$p(t|D) \propto p(D|t)p(t)$$.
+This gives us the distribution over output label $$y$$ given an input $$x$$ and all the data points seen before. By Bayes' rule, $$p(t\midD) \propto p(D\midt)p(t)$$.
 
 Suppose we have a parameterized model $$q_\theta$$ that accepts a dataset $$D$$ and query $$x$$ and predicts distributions of output $$y$$. We can define the $$\textit{Prior-Data Negative Log-Likelihood}$$:
 
 $$
 \begin{equation*}
-\ell_\theta = \mathbb{E}_{D \bigcup \{x,y\} \sim p(D)} [- \log q_\theta (y | x, D)].
+\ell_\theta = \mathbb{E}_{D \bigcup \{x,y\} \sim p(D)} [- \log q_\theta (y \mid x, D)].
 \end{equation*}
 $$
 
@@ -49,10 +49,10 @@ Proof:
 
 $$
 \begin{align*}
-\ell_\theta &= - \int_{D,x,y} p(x, y, D) \log q_{\theta} (y | x, D) \\
-&= - \int_{D, x} p(x, D) \int_y p(y | x, D) \log q_\theta (y | x, D) \\
-&= \int_{D,x} p(x,D) H(p(\cdot | x, D), q_\theta (\cdot | x, D)) \\
-&= \mathbb{E}_{x, D \sim p(D)} [H(p(\cdot | x, D), q_\theta (\cdot | x, D))],
+\ell_\theta &= - \int_{D,x,y} p(x, y, D) \log q_{\theta} (y \mid x, D) \\
+&= - \int_{D, x} p(x, D) \int_y p(y \mid x, D) \log q_\theta (y \mid x, D) \\
+&= \int_{D,x} p(x,D) H(p(\cdot \mid x, D), q_\theta (\cdot \mid x, D)) \\
+&= \mathbb{E}_{x, D \sim p(D)} [H(p(\cdot \mid x, D), q_\theta (\cdot \mid x, D))],
 \end{align*}
 $$
 where $$H$$ represent cross-entropy.
