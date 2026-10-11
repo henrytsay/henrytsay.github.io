@@ -56,7 +56,7 @@ $$
 \end{align*}
 $$
 
-where $$H$$ represent cross-entropy.
+where $$H$$ represents cross-entropy.
 
 This allows them to use a transformer model to directly approximate the PPD, in contrast to previous methods that approximated the posterior. The method shows clear results in the task of performing Bayesian inference in the case of Gaussian Processes (GPs).
 
