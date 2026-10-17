@@ -29,6 +29,24 @@ Open http://localhost:4000. Restart the server after changing `_config.yml`.
 - `_config.yml`: site settings and profile details
 - `images/`: images
 
+## Optional sections
+
+The Publications, Talks, Teaching, Portfolio, and CV pages are ready to use but
+are omitted from navigation. They remain accessible at their direct URLs.
+
+Add entries to `_publications/`, `_talks/`, `_teaching/`, or `_portfolio/`;
+the corresponding listing page updates automatically. Edit `_pages/cv.md`
+directly for your CV. The collection folders contain no sample entries.
+
+When a section is ready, add a link under `main` in `_data/navigation.yml`:
+
+```yaml
+  - title: "Publications"
+    url: /publications/
+```
+
+Other section URLs are `/talks/`, `/teaching/`, `/portfolio/`, and `/cv/`.
+
 The site is hosted at https://henrytsay.github.io.
 
 Theme attribution and licensing are preserved in `LICENSE` and the site footer.
