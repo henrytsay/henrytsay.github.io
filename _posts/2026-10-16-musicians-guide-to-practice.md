@@ -1,6 +1,6 @@
 ---
 title: "A Musician's Guide to Practice"
-date: 2026-10-09
+date: 2026-10-16
 permalink: /posts/2026/10/musicians-guide-to-practice/
 ---
 
