@@ -27,7 +27,7 @@ author:
   name             : "Henry Tsay"
   pronouns         : # example: "she/her"  
   bio              : "Undergraduate Computer Science Honors and Mathematics student"
-  location         : "Earth"
+  location         :
   employer         : "Purdue University"
   uri              : # URL
   email            : "htsay at purdue dot edu" 
