@@ -3,37 +3,54 @@ name: Scrape Talk Locations
 on:
   push:
     paths:
-      - 'talks/**'
       - '_talks/**'
       - 'talkmap.ipynb'
+      - '.github/workflows/scrape_talks.yml'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write           # This workflow pushes to the repository
+      contents: write
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
+
+    - name: Check for talk entries
+      id: talks
+      shell: bash
+      run: |
+        if compgen -G '_talks/*.md' > /dev/null; then
+          echo "present=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "present=false" >> "$GITHUB_OUTPUT"
+          echo "No talk entries; skipping map generation."
+        fi
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      if: steps.talks.outputs.present == 'true'
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.9'   # Specify the Python version you need
+        python-version: '3.11'
 
     - name: Install dependencies
-      run: |
-        pip install jupyter pandas requests beautifulsoup4 geopy  # Add other dependencies as needed
-        pip install getorg --upgrade
+      if: steps.talks.outputs.present == 'true'
+      run: python -m pip install jupyter python-frontmatter==1.2.0 getorg==0.3.1
 
     - name: Run Jupyter Notebook
-      run: |
-        jupyter nbconvert --to notebook --execute talkmap.ipynb --output talkmap_out.ipynb
+      if: steps.talks.outputs.present == 'true'
+      run: jupyter nbconvert --to notebook --execute talkmap.ipynb --output talkmap_out.ipynb
 
-    - name: Commit changes
+    - name: Commit map changes
+      if: steps.talks.outputs.present == 'true'
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
-        git add .
-        git commit -m "Automated update of talk locations" || echo "No changes to commit"
-        git push
+        git add -- talkmap/ talkmap_out.ipynb
+        if git diff --cached --quiet; then
+          echo "No map changes to commit."
+        else
+          git commit -m "Automated update of talk locations"
+          git push
+        fi
