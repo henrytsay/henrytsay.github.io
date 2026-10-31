@@ -1,5 +1,5 @@
 ---
-title: "Cahier of ($\\LaTeX$) grievances"
+title: "Cahier of (LaTeX) grievances"
 date: 2026-10-30
 permalink: /posts/2026/10/cahier-of-latex-grievances/
 ---
