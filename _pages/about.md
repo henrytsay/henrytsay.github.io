@@ -8,5 +8,3 @@ redirect_from:
 ---
 
 I'm an undergraduate studying Computer Science Honors and Mathematics at Purdue University.
-
-[Read my blog]({{ '/year-archive/' | relative_url }}).
